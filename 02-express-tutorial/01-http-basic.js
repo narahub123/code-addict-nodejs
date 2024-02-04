@@ -13,5 +13,3 @@ const server = http.createServer((req, res) => {
 
 // set up a port
 server.listen(5000);
-
-// thisis it
