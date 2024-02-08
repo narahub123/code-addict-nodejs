@@ -35,7 +35,8 @@ const getAllProducts = async (req, res) => {
       "<=": "$lte",
     };
 
-    const regEx = /\b(|>|>=|=|<|<=)\b/g;
+    const regEx = /\b(>|>=|<|<=|=)\b/g;
+
     let filters = numericFilters.replace(
       regEx,
       (match) => `-${operatorMap[match]}-`
