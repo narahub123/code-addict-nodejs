@@ -140,7 +140,36 @@ const showStats = async (req, res) => {
 
   console.log(stats);
 
-  res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications: [] });
+  // grouping
+  let monthlyApplications = await Job.aggregate([
+    { $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } },
+    {
+      $group: {
+        _id: { year: { $year: "$createdAt" }, month: { $month: "$createdAt" } },
+        count: { $sum: 1 },
+      },
+    },
+    // sorting monthlyApplicatins
+    { $sort: { "_id.year": -1, "_id.month": -1 } },
+    { $limit: 6 },
+  ]);
+  console.log(monthlyApplications);
+
+  monthlyApplications = monthlyApplications.map((item) => {
+    const {
+      _id: { year, month },
+      count,
+    } = item;
+    const date = moment()
+      .month(month - 1)
+      .year(year)
+      .format("MMM Y");
+    return { date, count };
+  });
+
+  console.log(monthlyApplications);
+
+  res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications });
 };
 
 module.exports = {
