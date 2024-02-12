@@ -10,8 +10,19 @@ const getAllJobs = async (req, res) => {
     createdBy: req.user.userId,
   };
 
+  // search
   if (search) {
     queryObject.position = { $regex: search, $options: "i" };
+  }
+
+  // status
+  if (status && status !== "all") {
+    queryObject.status = status;
+  }
+
+  // jobType
+  if (jobType && jobType !== "all") {
+    queryObject.jobType = jobType;
   }
 
   let result = Job.find(queryObject);
