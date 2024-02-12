@@ -37,7 +37,11 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
+// if we don't change the password, don't hash password again
 UserSchema.pre("save", async function () {
+  // check modified paths
+  // console.log(this.modifiedPaths());
+  if (!this.isModified("password")) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
