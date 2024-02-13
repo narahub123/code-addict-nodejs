@@ -10,7 +10,9 @@ const createProduct = async (req, res) => {
 
 // get all the products
 const getAllProducts = async (req, res) => {
-  res.send("list of prducts");
+  const products = await Product.find({});
+
+  res.status(StatusCodes.OK).json({ products });
 };
 
 module.exports = {
