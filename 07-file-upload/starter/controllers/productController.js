@@ -3,7 +3,9 @@ const { StatusCodes } = require("http-status-codes");
 
 // create a product
 const createProduct = async (req, res) => {
-  res.send("Create product");
+  console.log(req.body);
+  const product = await Product.create(req.body);
+  res.status(StatusCodes.CREATED).json({ product });
 };
 
 // get all the products
